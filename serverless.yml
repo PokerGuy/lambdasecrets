@@ -1,0 +1,23 @@
+service: devops-in-a-box
+plugins:
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-west-2
+  iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - kms:Encrypt
+          - kms:Decrypt
+        Resource:
+        - "arn:aws:kms:us-west-2:623856421218:key/71231bc9-cbb6-4c23-9db9-aa5450dd4199"
+functions:
+  githubListener:
+    handler: handler.githubListener
+    environment:
+      secret: "AQECAHinRDwcW6BLTgjjLMqbZHfvnCJPzkJTqe1kTjYjYgrdkAAAAGkwZwYJKoZIhvcNAQcGoFowWAIBADBTBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNOVbKytpVNgElvdQgIBEIAmddVBal/qe37sKV7XKEXfyWM6m+x/kz1i8vBbZNKzVMzo8zryq9w="
+    events:
+      - http:
+          path: git
+          method: post
